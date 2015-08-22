@@ -1,6 +1,7 @@
 package com.chaoyang805.blocksms;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,6 +44,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 保存从数据库中查询出来的短信
      */
     private List<SMS> mList;
+    /**
+     * notificationmanager用来取消所有的通知
+     */
+    private NotificationManager mNotificationManager;
 
 
     @Override
@@ -51,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initViews();
         initDatas();
+        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
     /**
@@ -84,10 +90,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        /**
-         * 从暂停中恢复后通过数据库更新界面
-         */
+        //从暂停中恢复后通过数据库更新界面
         updateUI();
+        //取消掉拦截通知
+        mNotificationManager.cancel(Constants.NOTIFICATION_ID);
     }
 
     /**

@@ -18,5 +18,5 @@ public class Constants {
 
     public static final String EXTRA_ID = "extra_id";
 
-    public static final int NOTIFICATION_ID = 1;
+    public static final int NOTIFICATION_ID = 0x1213;
 }

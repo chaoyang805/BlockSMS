@@ -1,8 +1,6 @@
 <resources>
-    <string name="app_name">BlockSMS</string>
+    <string name="app_name">短信拦截工具</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
     <string name="add_keyword">添加关键字</string>

@@ -153,7 +153,7 @@ public class SMSReceiver extends BroadcastReceiver {
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setSmallIcon(R.mipmap.ic_launcher)
+        builder.setSmallIcon(R.mipmap.ic_sms_failed_grey600_24dp)
                 .setContentTitle(context.getString(R.string.new_sms_was_blocked, sms.getPhoneNum()))
                 .setContentText(context.getString(R.string.notification_text_content, sms.getPhoneNum()))
                 .setContentIntent(pendingIntent);
