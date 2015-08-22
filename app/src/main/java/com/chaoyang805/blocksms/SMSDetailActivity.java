@@ -70,7 +70,7 @@ public class SMSDetailActivity extends AppCompatActivity {
     private void showSMSDetail(SMS sms) {
         LogHelper.d(TAG, "showSMSDetail");
         mTvSMSDetail.setText(sms.getSMSInfo());
-        mTvRelatedNum.setText(sms.getPhoneNum());
+        mTvRelatedNum.setText(getString(R.string.from,sms.getPhoneNum()));
         mTvRelatedTime.setText(StringFormatUtil.formatMilliseconds(sms.getReceivedTime()));
     }
 

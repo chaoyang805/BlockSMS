@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * Created by chaoyang805 on 2015/8/22.
+ * 显示和编辑关键词的activity
  */
 public class KeywordsActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemLongClickListener {
 

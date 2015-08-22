@@ -141,11 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mSMSDaoImpl.deleteSMS(mAdapter.getItem(position));
                         //更新界面的数据
                         updateUI();
-                        if (mList.size() > 0) {
-                            getSupportActionBar().setTitle(R.string.blocked_sms);
-                        } else {
-                            getSupportActionBar().setTitle(R.string.no_sms_was_blocked);
-                        }
+
                     }
                 })
                 .setNegativeButton("取消", null).show();
@@ -156,6 +152,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void updateUI() {
         mList = mSMSDaoImpl.getAllSMS();
+        if (mList.size() > 0) {
+            getSupportActionBar().setTitle(R.string.blocked_sms);
+        } else {
+            getSupportActionBar().setTitle(R.string.no_sms_was_blocked);
+        }
         mAdapter.updateList(mList);
     }
 

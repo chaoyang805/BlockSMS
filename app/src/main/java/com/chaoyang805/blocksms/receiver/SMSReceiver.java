@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsMessage;
 
+import com.chaoyang805.blocksms.BuildConfig;
 import com.chaoyang805.blocksms.MainActivity;
 import com.chaoyang805.blocksms.R;
 import com.chaoyang805.blocksms.bean.Keyword;
@@ -64,8 +65,8 @@ public class SMSReceiver extends BroadcastReceiver {
                 //显示拦截通知
                 showNotification(sms, context);
             }
-            //测试代码
-        } else if (intent.getAction() == ACTION_SMS_TEST) {
+            //模拟发送短信的测试代码，使用sendbroadcast项目来发送广播
+        } else if (intent.getAction() == ACTION_SMS_TEST && BuildConfig.DEBUG) {
             String content = intent.getStringExtra("extra_content");
             String phoneNum = intent.getStringExtra("extra_phone_num");
             long time = intent.getLongExtra("extra_time", 0);
@@ -157,6 +158,9 @@ public class SMSReceiver extends BroadcastReceiver {
                 .setContentText(context.getString(R.string.notification_text_content, sms.getPhoneNum()))
                 .setContentIntent(pendingIntent);
         Notification notification = builder.build();
+        notification.defaults = Notification.DEFAULT_ALL;
+        notification.tickerText = context.getString(R.string.notification_text_content, sms.getPhoneNum());
+
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         notificationManager.notify(Constants.NOTIFICATION_ID, notification);
     }
