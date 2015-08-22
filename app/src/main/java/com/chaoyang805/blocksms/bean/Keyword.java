@@ -9,11 +9,11 @@ public class Keyword {
     private String mKeyword;
     private int mId;
 
-    public String getKeyword() {
+    public String getKeywordStr() {
         return mKeyword;
     }
 
-    public void setKeyword(String keyword) {
+    public void setKeywordStr(String keyword) {
         mKeyword = keyword;
     }
 
@@ -23,5 +23,10 @@ public class Keyword {
 
     public void setId(int id) {
         mId = id;
+    }
+
+    @Override
+    public String toString() {
+        return getKeywordStr();
     }
 }

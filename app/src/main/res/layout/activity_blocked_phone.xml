@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".BlockedPhoneActivity">
+
+    <ListView
+        android:id="@+id/lv_blocked_phone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    </ListView>
+
+
+    <Button
+        android:id="@+id/btn_add_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/add_phone_to_black_list"/>
+</LinearLayout>

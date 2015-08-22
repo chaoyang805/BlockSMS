@@ -3,39 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
-
-    <TextView
-        android:id="@+id/tv_tag"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:text="已拦截的短信"
-        android:textSize="24sp"/>
-
-    <FrameLayout
+    <ListView
+        android:id="@+id/lv_blocked_sms"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_below="@id/tv_tag"
-        android:layout_marginTop="5dp"
         android:layout_weight="1">
-
-        <TextView
-            android:id="@+id/tv_no_blocked_sms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="还没有拦截到短信"
-            android:visibility="gone"/>
-
-        <ListView
-            android:id="@+id/lv_blocked_sms"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </ListView>
-    </FrameLayout>
-
+    </ListView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,7 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="查看屏蔽关键字"
+            android:text="@string/see_blocked_keywords"
             />
 
         <Button
@@ -58,7 +32,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="查看屏蔽黑名单"
+            android:text="@string/see_blocked_phone_numbers"
             />
     </LinearLayout>
 

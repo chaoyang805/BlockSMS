@@ -2,69 +2,55 @@ package com.chaoyang805.blocksms;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.IntentFilter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.chaoyang805.blocksms.adapter.SMSAdapter;
+import com.chaoyang805.blocksms.app.BlockSMSApp;
 import com.chaoyang805.blocksms.bean.SMS;
 import com.chaoyang805.blocksms.db.SMSDAOImpl;
-import com.chaoyang805.blocksms.receiver.SMSReceiver;
-import com.chaoyang805.blocksms.utils.LogHelper;
+import com.chaoyang805.blocksms.utils.Constants;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
-
+    /**
+     * 显示拦截到的短信的listview
+     */
     private ListView mLvBlockedSMS;
-    private TextView mTvNoBlockedSMS;
-    private Button mBtnShowBlackList, mBtnShowKeywords;
-    private SMSDAOImpl mSmsDao;
+    /**
+     * 查看黑名单的button
+     */
+    private Button mBtnShowBlackList;
+    /**
+     * 查看关键词的button
+     */
+    private Button mBtnShowKeywords;
+    /**
+     * 数据库访问对象
+     */
+    private SMSDAOImpl mSMSDaoImpl;
+    /**
+     * listview对应的adapter
+     */
     private SMSAdapter mAdapter;
+    /**
+     * 保存从数据库中查询出来的短信
+     */
     private List<SMS> mList;
-    private static final String TAG = LogHelper.makeLogTag(MainActivity.class);
 
-    private SMSReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LogHelper.isShouldUseLog = true;
         initViews();
         initDatas();
-        registerSMSReceiver();
-    }
-
-    private void registerSMSReceiver() {
-        mReceiver = new SMSReceiver(this, mSmsDao);
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(SMSReceiver.ACTION_SMS_RECEIVED);
-        filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
-        registerReceiver(mReceiver, filter);
-        LogHelper.d(TAG, "Broadcast Registered >>>>");
-    }
-
-    private void initDatas() {
-        mSmsDao = new SMSDAOImpl(this);
-        mList = mSmsDao.getAllSMS();
-        if (mList.size() > 0 && mList != null) {
-            mTvNoBlockedSMS.setVisibility(View.GONE);
-            Log.d(TAG, "TextView GONE");
-            mLvBlockedSMS.setVisibility(View.VISIBLE);
-            mAdapter = new SMSAdapter(this, mList);
-            mLvBlockedSMS.setAdapter(mAdapter);
-        } else {
-            mLvBlockedSMS.setVisibility(View.GONE);
-            Log.d(TAG, "ListView GONE");
-            mTvNoBlockedSMS.setVisibility(View.VISIBLE);
-        }
     }
 
     /**
@@ -74,41 +60,91 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mLvBlockedSMS = (ListView) findViewById(R.id.lv_blocked_sms);
         mBtnShowBlackList = (Button) findViewById(R.id.btn_show_blacklist);
         mBtnShowKeywords = (Button) findViewById(R.id.btn_show_key_words);
-        mTvNoBlockedSMS = (TextView) findViewById(R.id.tv_no_blocked_sms);
         mBtnShowBlackList.setOnClickListener(this);
         mBtnShowKeywords.setOnClickListener(this);
         mLvBlockedSMS.setOnItemLongClickListener(this);
         mLvBlockedSMS.setOnItemClickListener(this);
     }
 
+    /**
+     * 初始化数据
+     */
+    private void initDatas() {
+        mSMSDaoImpl = ((BlockSMSApp) getApplication()).getSMSDaoImpl();
+        mList = mSMSDaoImpl.getAllSMS();
+        if (mList.size() > 0) {
+            getSupportActionBar().setTitle(R.string.blocked_sms);
+        } else {
+            getSupportActionBar().setTitle(R.string.no_sms_was_blocked);
+        }
+        mAdapter = new SMSAdapter(this, mList);
+        mLvBlockedSMS.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        /**
+         * 从暂停中恢复后通过数据库更新界面
+         */
+        updateUI();
+    }
+
+    /**
+     * button的点击监听
+     * @param v
+     */
     @Override
     public void onClick(View v) {
-        //TODO 实现添加黑名单和关键字
+        Intent intent;
         switch (v.getId()) {
+            case R.id.btn_show_key_words:
+                intent = new Intent(this, KeywordsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_show_blacklist:
+                intent = new Intent(this, BlockedPhoneActivity.class);
+                startActivity(intent);
+                break;
 
         }
     }
 
+    /**
+     * 长按listview的item时，提示删除
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     * @return
+     */
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        showAlertDialog(position);
+        //显示删除的dialog
+        showDeleteDialog(position);
         return true;
     }
 
-    private void showAlertDialog(final int position) {
+    /**
+     * 显示删除的dialog
+     * @param position
+     */
+    private void showDeleteDialog(final int position) {
         AlertDialog.Builder deleteDialogBuilder = new AlertDialog.Builder(this);
-        deleteDialogBuilder.setTitle("删除短信")
-                .setMessage("确定要删除？")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        deleteDialogBuilder
+                .setTitle(R.string.delete_sms)
+                .setMessage(R.string.are_you_sure_you_want_delete_this_sms)
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mSmsDao.deleteSMS(mAdapter.getItem(position));
-                        mList = mSmsDao.getAllSMS();
-                        if (mList.size() <= 0) {
-                            mLvBlockedSMS.setVisibility(View.GONE);
-                            mTvNoBlockedSMS.setVisibility(View.VISIBLE);
+                        //将按下的item的对应信息从数据库删除
+                        mSMSDaoImpl.deleteSMS(mAdapter.getItem(position));
+                        //更新界面的数据
+                        updateUI();
+                        if (mList.size() > 0) {
+                            getSupportActionBar().setTitle(R.string.blocked_sms);
                         } else {
-                            mAdapter.updateList(mList);
+                            getSupportActionBar().setTitle(R.string.no_sms_was_blocked);
                         }
                     }
                 })
@@ -116,16 +152,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Activity销毁时取消广播
+     * 更新界面
      */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(mReceiver);
+    private void updateUI() {
+        mList = mSMSDaoImpl.getAllSMS();
+        mAdapter.updateList(mList);
     }
 
+    /**
+     * 点击item时，将显示详情界面
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //TODO 实现详情界面
+        //将sms对象对应的id通过intent传递到详情activity
+        int currentPosId = mAdapter.getItem(position).getId();
+        Intent intent = new Intent(this, SMSDetailActivity.class);
+        intent.putExtra(Constants.EXTRA_ID, currentPosId);
+        startActivity(intent);
     }
 }

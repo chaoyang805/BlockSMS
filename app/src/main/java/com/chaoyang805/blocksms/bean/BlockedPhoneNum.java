@@ -17,11 +17,16 @@ public class BlockedPhoneNum {
         mId = id;
     }
 
-    public String getPhoneNum() {
+    public String getPhoneNumStr() {
         return mPhoneNum;
     }
 
-    public void setPhoneNum(String phoneNum) {
+    public void setPhoneNumStr(String phoneNum) {
         mPhoneNum = phoneNum;
+    }
+
+    @Override
+    public String toString() {
+        return getPhoneNumStr();
     }
 }

@@ -1,74 +1,127 @@
 package com.chaoyang805.blocksms.receiver;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsMessage;
-import android.util.Log;
-import android.widget.Toast;
 
+import com.chaoyang805.blocksms.MainActivity;
+import com.chaoyang805.blocksms.R;
+import com.chaoyang805.blocksms.bean.Keyword;
 import com.chaoyang805.blocksms.bean.SMS;
 import com.chaoyang805.blocksms.db.SMSDAOImpl;
+import com.chaoyang805.blocksms.utils.Constants;
 import com.chaoyang805.blocksms.utils.LogHelper;
+
+import java.util.List;
+
 
 public class SMSReceiver extends BroadcastReceiver {
 
     public static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+    public static final String ACTION_SMS_TEST = "com.chaoyang805.blocksms.SMSReceiver.TEST";
+
     private static final String TAG = "SMSReceiver";
-    private Context mContext;
-    private SMSDAOImpl mSMSDAO;
-    /**
-     * OriginatingAddress 10010 :
-     * DisplayOriginatingAddress 10010 :
-     * DisplayMessageBody 尊敬的用户，请回复以下编码办理业务：
-     * 1505：已订业务查询
-     * 1503：积分查询
-     * 1071：手机上网流量查询
-     * 15 :
-     * getTimestampMillis() 1440080508000
-     * 10010 :
-     * 10010 :
-     * 01：套餐余量查询
-     * 5083：流量半年包余量查询
-     * 【买4G就上 m.10010.com】 :
-     * 1440080512000
-     */
-    public SMSReceiver(){
+    private SMSDAOImpl mSMSDaoImpl;
 
-    }
 
-    public SMSReceiver(Context context,SMSDAOImpl smsdao) {
-        mContext = context;
-        mSMSDAO = smsdao;
+    public SMSReceiver() {
     }
 
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        //通过传入的context实例化数据库访问的对象
+        mSMSDaoImpl = new SMSDAOImpl(context);
+        //是否为收到短信的广播
         if (intent.getAction().equals(ACTION_SMS_RECEIVED)) {
+            //从intent中解析短信内容
             SmsMessage[] msgs = getSMSFromIntent(intent);
+
             String phoneNum;
             StringBuilder msg = new StringBuilder();
             long receivedTime;
+            //遍历msgs数组得到短信的内容
             for (SmsMessage message : msgs) {
-//                Log.i(TAG, message.getOriginatingAddress() + " : " +
-//                        message.getDisplayOriginatingAddress() + " : " +
-//                        message.getDisplayMessageBody() + " : " +
-//                        message.getTimestampMillis());
                 msg.append(message.getDisplayMessageBody());
-
             }
+            //发短信的号码
             phoneNum = msgs[0].getOriginatingAddress();
+            //收到的时间
             receivedTime = msgs[0].getTimestampMillis();
+            //构造SMS对象
             SMS sms = new SMS(receivedTime, msg.toString(), phoneNum);
-            mSMSDAO.insertBlockSMS(sms);
-            LogHelper.d(TAG, "SMS was blocked:" + msg);
-            Toast.makeText(mContext,"拦截到短信",Toast.LENGTH_SHORT).show();
-            abortBroadcast();
-            Log.d(TAG, "broadcast was aborted");
+            //是否该拦截短信
+            if (isShouldBlock(sms)) {
+                //将短信存入数据库中
+                blockSms(sms);
+                //终止广播
+                abortBroadcast();
+                //显示拦截通知
+                showNotification(sms, context);
+            }
+            //测试代码
+        } else if (intent.getAction() == ACTION_SMS_TEST) {
+            String content = intent.getStringExtra("extra_content");
+            String phoneNum = intent.getStringExtra("extra_phone_num");
+            long time = intent.getLongExtra("extra_time", 0);
+            SMS testSMS = new SMS(time, content, phoneNum);
+            if (isShouldBlock(testSMS)) {
+                //将短信存入数据库中
+                blockSms(testSMS);
+                //终止广播
+                abortBroadcast();
+                //显示拦截通知
+                showNotification(testSMS, context);
+            }
         }
     }
 
+    /**
+     * 通过查询数据库判断是否该拦截短信
+     *
+     * @param sms
+     * @return
+     */
+    private boolean isShouldBlock(SMS sms) {
+        //如果短信号码在黑名单里，进行拦截
+        if (mSMSDaoImpl.isPhoneNumExists(sms.getPhoneNum())) {
+            return true;
+
+        } else {
+            List<Keyword> allKeywords = mSMSDaoImpl.getAllKeywords();
+            String keywordStr;
+            for (Keyword keyword : allKeywords) {
+                keywordStr = keyword.getKeywordStr();
+                boolean exists = sms.getSMSInfo().contains(keywordStr);
+                if (exists) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 将拦截到的短信保存到数据库
+     *
+     * @param sms
+     */
+    private void blockSms(SMS sms) {
+        mSMSDaoImpl.insertBlockSMS(sms);
+        LogHelper.d(TAG, "sms was blocked " + sms.getPhoneNum() + " " + sms.getSMSInfo());
+    }
+
+    /**
+     * 从intent中解析短信内容
+     *
+     * @param intent
+     * @return
+     */
     public SmsMessage[] getSMSFromIntent(Intent intent) {
         Object[] messages = (Object[]) intent.getSerializableExtra("pdus");
         byte[][] pduObjs = new byte[messages.length][];
@@ -83,5 +136,28 @@ public class SMSReceiver extends BroadcastReceiver {
             msgs[i] = SmsMessage.createFromPdu(pdus[i]);
         }
         return msgs;
+    }
+
+    /**
+     * 拦截到短信后进行通知
+     *
+     * @param sms
+     * @param context
+     */
+    private void showNotification(SMS sms, Context context) {
+
+        NotificationManager notificationManager = (NotificationManager) context.
+                getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(context.getString(R.string.new_sms_was_blocked, sms.getPhoneNum()))
+                .setContentText(context.getString(R.string.notification_text_content, sms.getPhoneNum()))
+                .setContentIntent(pendingIntent);
+        Notification notification = builder.build();
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        notificationManager.notify(Constants.NOTIFICATION_ID, notification);
     }
 }

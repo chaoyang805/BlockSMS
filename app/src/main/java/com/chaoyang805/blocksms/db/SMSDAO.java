@@ -64,6 +64,13 @@ public interface SMSDAO {
     public void updateKeyword(String oldWord, String newWord);
 
     /**
+     * 根据id查询短信
+     * @param smsId
+     * @return
+     */
+    public SMS getSMSById(int smsId);
+
+    /**
      * 获取黑名单里的所有号码
      * @return
      */
@@ -83,15 +90,15 @@ public interface SMSDAO {
 
     /**
      * 查询号码是否已经在黑名单里
-     * @param phoneNum
+     * @param phoneNumStr
      * @return
      */
-    public boolean isPhoneNumExists(BlockedPhoneNum phoneNum);
+    public boolean isPhoneNumExists(String phoneNumStr);
 
     /**
      * 查询关键字是否已经在黑名单里
-     * @param keyword
+     * @param keywordStr
      * @return
      */
-    public boolean isKeywordExists(Keyword keyword);
+    public boolean isKeywordExists(String keywordStr);
 }
