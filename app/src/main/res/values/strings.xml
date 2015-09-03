@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">短信拦截工具</string>
+
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="add_keyword">添加关键字</string>
+    <string name="add_phone_to_black_list">添加号码到黑名单</string>
+    <string name="you_input_nothing">没有输入内容</string>
+    <string name="keyword_already_exists">关键词已经存在</string>
+    <string name="phone_num_already_exists">号码已经存在</string>
+    <string name="edit_keyword">编辑关键字</string>
+    <string name="delete_keyword">删除关键字</string>
+    <string name="edit_phone">编辑号码</string>
+    <string name="delete_phone">删除号码</string>
+    <string name="are_you_sure_you_want_delete_this_sms">确定要删除这条信息？</string>
+    <string name="are_you_sure_you_want_to_delete_this_num">"确定要删除这条号码？"</string>
+    <string name="are_you_sure_you_want_to_delete_this_keyword">"确定要删除这条关键字？"</string>
+    <string name="failed_to_edit_keyword">修改关键词失败</string>
+    <string name="failed_to_edit_phone">修改号码失败</string>
+    <string name="delete_sms">删除短信</string>
+    <string name="keyword">关键字</string>
+    <string name="blocked_keywords">已拦截的关键字</string>
+    <string name="blocked_sms">已拦截的短信</string>
+    <string name="blocked_phone">已拦截的号码</string>
+    <string name="no_keywords_was_added">未添加关键字</string>
+    <string name="no_sms_was_blocked">未拦截到短信</string>
+    <string name="no_phone_num_was_added">未添加号码</string>
+    <string name="new_sms_was_blocked">拦截到新短信</string>
+    <string name="notification_text_content">拦截到来自%1$s的短信</string>
+    <string name="from">来自:%1$s</string>
+
+    <string-array name="keyword_options_items">
+        <item>编辑</item>
+        <item>删除</item>
+    </string-array>
+    <string name="sms_detail">短信详情</string>
+    <string name="see_blocked_keywords">查看屏蔽的关键字</string>
+    <string name="see_blocked_phone_numbers">查看屏蔽的号码</string>
+</resources>

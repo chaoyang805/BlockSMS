@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="com.chaoyang805.blocksms"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+
+    <application
+        android:name=".app.BlockSMSApp"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SMSDetailActivity"
+            android:label="@string/sms_detail">
+        </activity>
+        <activity
+            android:name=".KeywordsActivity"
+            android:label="@string/keyword">
+        </activity>
+        <activity
+            android:name=".BlockedPhoneActivity"
+            android:label="@string/blocked_phone">
+        </activity>
+
+        <receiver
+            android:name=".receiver.SMSReceiver"
+            android:enabled="true"
+            android:exported="true"
+            >
+            <intent-filter
+                android:priority="1000">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>
