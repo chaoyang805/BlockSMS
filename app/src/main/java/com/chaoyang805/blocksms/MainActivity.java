@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -16,11 +17,13 @@ import com.chaoyang805.blocksms.adapter.SMSAdapter;
 import com.chaoyang805.blocksms.app.BlockSMSApp;
 import com.chaoyang805.blocksms.bean.SMS;
 import com.chaoyang805.blocksms.db.SMSDAOImpl;
+import com.chaoyang805.blocksms.fragment.DrawerFragment;
 import com.chaoyang805.blocksms.utils.Constants;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,
+        AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
     /**
      * 显示拦截到的短信的listview
      */
@@ -52,15 +55,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Toolbar mToolbar;
 
+    private DrawerLayout mDrawerLayout;
+
+    private DrawerFragment mDrawerFragment;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        setSupportActionBar(mToolbar);
+        initDrawer();
         initDatas();
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    }
+
+    /**
+     * 初始化drawer
+     */
+    private void initDrawer() {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerFragment = (DrawerFragment) getFragmentManager().findFragmentById(R.id.drawer_fragment);
+
+        //设置drawer上的statusbar颜色
+//        TypedValue t = new TypedValue();
+//        getTheme().resolveAttribute(R.attr.colorPrimaryDark, t, true);
+//        int color = t.data;
+//        Log.e("TAG", "color = " + color);
+//        mDrawerLayout.setStatusBarBackgroundColor(color);
+        //设置toolbar
+        setSupportActionBar(mToolbar);
+        mDrawerFragment.setupDrawer(R.id.drawer_fragment_container,mDrawerLayout,mToolbar);
     }
 
     /**

@@ -28,7 +28,7 @@
     <string name="new_sms_was_blocked">拦截到新短信</string>
     <string name="notification_text_content">拦截到来自%1$s的短信</string>
     <string name="from">来自:%1$s</string>
-
+    
     <string-array name="keyword_options_items">
         <item>编辑</item>
         <item>删除</item>
@@ -36,4 +36,7 @@
     <string name="sms_detail">短信详情</string>
     <string name="see_blocked_keywords">查看屏蔽的关键字</string>
     <string name="see_blocked_phone_numbers">查看屏蔽的号码</string>
+    
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

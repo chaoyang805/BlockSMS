@@ -1,4 +1,5 @@
 <android.support.v4.widget.DrawerLayout
+    xmlns:chaoyang805="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -16,6 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?colorPrimary"
+            chaoyang805:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            chaoyang805:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:minHeight="?android:attr/actionBarSize"/>
 
         <LinearLayout
@@ -60,20 +63,18 @@
     </LinearLayout>
 
     <com.chaoyang805.blocksms.utils.ScrimInsetsFrameLayout
-        xmlns:chaoyang805="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/scrimInsetsFrameLayout"
+        android:id="@+id/drawer_fragment_container"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:elevation="10dp"
         android:fitsSystemWindows="true"
-        chaoyang805:insetForeground="#4000"
-        >
+        chaoyang805:insetForeground="#4000">
         <fragment
-            android:id="@+id/drawer_container"
+            android:id="@+id/drawer_fragment"
             android:layout_width="@dimen/navigation_drawer_width"
             android:layout_height="match_parent"
             tools:layout="@layout/drawer_layout_fragment"
-            android:name="android.support.v4.app.ListFragment"/>
+            android:name="com.chaoyang805.blocksms.fragment.DrawerFragment"/>
     </com.chaoyang805.blocksms.utils.ScrimInsetsFrameLayout>
 </android.support.v4.widget.DrawerLayout>
