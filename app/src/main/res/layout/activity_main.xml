@@ -20,46 +20,49 @@
             chaoyang805:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             chaoyang805:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:minHeight="?android:attr/actionBarSize"/>
-
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:context=".MainActivity">
+            android:layout_height="match_parent"></FrameLayout>
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical"-->
+            <!--tools:context=".MainActivity">-->
 
-            <ListView
-                android:id="@+id/lv_blocked_sms"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-            </ListView>
+            <!--<ListView-->
+                <!--android:id="@+id/lv_blocked_sms"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1">-->
+            <!--</ListView>-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lv_blocked_sms"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@id/lv_blocked_sms"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:layout_marginRight="16dp">-->
 
-                <Button
-                    android:id="@+id/btn_show_key_words"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/see_blocked_keywords"
-                    />
+                <!--<Button-->
+                    <!--android:id="@+id/btn_show_key_words"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/see_blocked_keywords"-->
+                    <!--/>-->
 
-                <Button
-                    android:id="@+id/btn_show_blacklist"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/see_blocked_phone_numbers"
-                    />
-            </LinearLayout>
+                <!--<Button-->
+                    <!--android:id="@+id/btn_show_blacklist"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="@string/see_blocked_phone_numbers"-->
+                    <!--/>-->
+            <!--</LinearLayout>-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
     </LinearLayout>
 
     <com.chaoyang805.blocksms.utils.ScrimInsetsFrameLayout

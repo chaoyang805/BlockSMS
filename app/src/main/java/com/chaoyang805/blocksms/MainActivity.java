@@ -18,6 +18,7 @@ import com.chaoyang805.blocksms.app.BlockSMSApp;
 import com.chaoyang805.blocksms.bean.SMS;
 import com.chaoyang805.blocksms.db.SMSDAOImpl;
 import com.chaoyang805.blocksms.fragment.DrawerFragment;
+import com.chaoyang805.blocksms.fragment.SMSFragment;
 import com.chaoyang805.blocksms.utils.Constants;
 
 import java.util.List;
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private DrawerFragment mDrawerFragment;
 
+    private SMSFragment mSMSFragment;
+
 
 
     @Override
@@ -69,6 +72,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initDrawer();
         initDatas();
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        initSMSFragment();
+    }
+
+    private void initSMSFragment() {
+        mSMSFragment = new SMSFragment();
+
+        getFragmentManager().beginTransaction().replace(R.id.container, mSMSFragment, "sms_fragment").commit();
     }
 
     /**
@@ -94,13 +104,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void initViews() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mLvBlockedSMS = (ListView) findViewById(R.id.lv_blocked_sms);
-        mBtnShowBlackList = (Button) findViewById(R.id.btn_show_blacklist);
-        mBtnShowKeywords = (Button) findViewById(R.id.btn_show_key_words);
-        mBtnShowBlackList.setOnClickListener(this);
-        mBtnShowKeywords.setOnClickListener(this);
-        mLvBlockedSMS.setOnItemLongClickListener(this);
-        mLvBlockedSMS.setOnItemClickListener(this);
+//        mLvBlockedSMS = (ListView) findViewById(R.id.lv_blocked_sms);
+//        mBtnShowBlackList = (Button) findViewById(R.id.btn_show_blacklist);
+//        mBtnShowKeywords = (Button) findViewById(R.id.btn_show_key_words);
+//        mBtnShowBlackList.setOnClickListener(this);
+//        mBtnShowKeywords.setOnClickListener(this);
+//        mLvBlockedSMS.setOnItemLongClickListener(this);
+//        mLvBlockedSMS.setOnItemClickListener(this);
     }
 
     /**
@@ -114,15 +124,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             getSupportActionBar().setTitle(R.string.no_sms_was_blocked);
         }
-        mAdapter = new SMSAdapter(this, mList);
-        mLvBlockedSMS.setAdapter(mAdapter);
+//        mAdapter = new SMSAdapter(this, mList);
+//        mLvBlockedSMS.setAdapter(mAdapter);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         //从暂停中恢复后通过数据库更新界面
-        updateUI();
+//        updateUI();
         //取消掉拦截通知
         mNotificationManager.cancel(Constants.NOTIFICATION_ID);
     }
@@ -133,18 +143,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @Override
     public void onClick(View v) {
-        Intent intent;
-        switch (v.getId()) {
-            case R.id.btn_show_key_words:
-                intent = new Intent(this, KeywordsActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.btn_show_blacklist:
-                intent = new Intent(this, BlockedPhoneActivity.class);
-                startActivity(intent);
-                break;
-
-        }
+//        Intent intent;
+//        switch (v.getId()) {
+//            case R.id.btn_show_key_words:
+//                intent = new Intent(this, KeywordsActivity.class);
+//                startActivity(intent);
+//                break;
+//            case R.id.btn_show_blacklist:
+//                intent = new Intent(this, BlockedPhoneActivity.class);
+//                startActivity(intent);
+//                break;
+//
+//        }
     }
 
     /**
