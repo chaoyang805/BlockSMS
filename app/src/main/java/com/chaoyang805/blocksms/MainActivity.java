@@ -18,13 +18,15 @@ import com.chaoyang805.blocksms.app.BlockSMSApp;
 import com.chaoyang805.blocksms.bean.SMS;
 import com.chaoyang805.blocksms.db.SMSDAOImpl;
 import com.chaoyang805.blocksms.fragment.DrawerFragment;
+import com.chaoyang805.blocksms.fragment.KeywordsFragment;
+import com.chaoyang805.blocksms.fragment.PhoneListFragment;
 import com.chaoyang805.blocksms.fragment.SMSFragment;
 import com.chaoyang805.blocksms.utils.Constants;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
-        AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
+        AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener, DrawerFragment.OnOptionsClickedListener {
     /**
      * 显示拦截到的短信的listview
      */
@@ -61,8 +63,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerFragment mDrawerFragment;
 
     private SMSFragment mSMSFragment;
-
-
+    /**
+     * 当前显示的fragment位置，默认为第一个fragment
+     */
+    private int mCurrentPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,5 +225,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, SMSDetailActivity.class);
         intent.putExtra(Constants.EXTRA_ID, currentPosId);
         startActivity(intent);
+    }
+
+    @Override
+    public void onOptionsClicked(int position) {
+        switch (position) {
+            case 0:
+                if (mCurrentPosition != 0) {
+                    getFragmentManager().beginTransaction().replace(R.id.container, mSMSFragment).commit();
+                    mCurrentPosition = 0;
+                }
+                break;
+            case 1:
+                if (mCurrentPosition != 1) {
+                    getFragmentManager().beginTransaction().replace(R.id.container, new PhoneListFragment()).commit();
+                    mCurrentPosition = 1;
+                }
+                break;
+            case 2:
+                if (mCurrentPosition != 2) {
+                    getFragmentManager().beginTransaction().replace(R.id.container, new KeywordsFragment()).commit();
+                    mCurrentPosition = 2;
+                }
+                break;
+            default:
+                break;
+        }
+        mDrawerFragment.closeDrawer();
     }
 }

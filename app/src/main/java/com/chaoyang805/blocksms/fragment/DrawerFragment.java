@@ -13,11 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.chaoyang805.blocksms.MainActivity;
 import com.chaoyang805.blocksms.R;
 import com.chaoyang805.blocksms.adapter.DrawerListAdapter;
+import com.chaoyang805.blocksms.listener.RecyclerListenerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,11 +37,25 @@ public class DrawerFragment extends Fragment {
     private DrawerListAdapter mAdapter;
     private Context mContext;
 
+    private OnOptionsClickedListener mListener;
+
+    public interface OnOptionsClickedListener {
+        void onOptionsClicked(int position);
+    }
+
+    public void setOnOptionsClickedListener(OnOptionsClickedListener listener) {
+        mListener = listener;
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.drawer_layout_fragment, container, false);
+        if (getActivity() instanceof OnOptionsClickedListener) {
+            this.setOnOptionsClickedListener((OnOptionsClickedListener) getActivity());
+        } else {
+            throw new IllegalStateException("Related Activity must implents interface OnOptionsClickedListener!");
+        }
         mList = (RecyclerView) mRootView.findViewById(R.id.drawer_list);
         mContext = getActivity();
         final List<String> datas = new ArrayList<>();
@@ -51,11 +65,10 @@ public class DrawerFragment extends Fragment {
         mAdapter = new DrawerListAdapter(datas);
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         mList.setLayoutManager(manager);
-        mAdapter.setOnItemClickListener(new DrawerListAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new RecyclerListenerAdapter() {
             @Override
             public void onItemClick(View v, int position) {
-                datas.get(position);
-                Toast.makeText(mContext,"position = "+position,Toast.LENGTH_SHORT).show();
+                mListener.onOptionsClicked(position);
             }
         });
         mList.setAdapter(mAdapter);
@@ -64,28 +77,30 @@ public class DrawerFragment extends Fragment {
 
     /**
      * 初始化drawer
+     *
      * @param drawerFragmentContainerId 承载drawer布局的framelayout的id
-     * @param drawerLayout DrawerLayout对象
-     * @param toolbar   Toolbar对象
+     * @param drawerLayout              DrawerLayout对象
+     * @param toolbar                   Toolbar对象
      */
     public void setupDrawer(int drawerFragmentContainerId, DrawerLayout drawerLayout, Toolbar toolbar) {
         mDrawerFragmentContainer = getActivity().findViewById(drawerFragmentContainerId);
         mDrawerLayout = drawerLayout;
         mToolbar = toolbar;
 
-        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, mToolbar,
                 R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close){
+                R.string.navigation_drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 //重新加载optionsMenu
                 ((MainActivity) getActivity()).supportInvalidateOptionsMenu();
             }
+
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -102,5 +117,17 @@ public class DrawerFragment extends Fragment {
         });
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+    }
+
+    public void closeDrawer(){
+        mDrawerLayout.closeDrawer(mDrawerFragmentContainer);
+    }
+
+    public void openDrawer() {
+        mDrawerLayout.openDrawer(mDrawerFragmentContainer);
+    }
+
+    public boolean isDrawerOpen(){
+        return mDrawerLayout.isDrawerOpen(mDrawerFragmentContainer);
     }
 }

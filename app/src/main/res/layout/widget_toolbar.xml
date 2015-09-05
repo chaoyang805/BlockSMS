@@ -1,0 +1,9 @@
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:chaoyang805="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?colorPrimary"
+    chaoyang805:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    chaoyang805:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    android:minHeight="?android:attr/actionBarSize"/>

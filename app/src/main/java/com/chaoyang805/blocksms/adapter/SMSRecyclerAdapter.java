@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.chaoyang805.blocksms.R;
-import com.chaoyang805.blocksms.RecyclerListenerAdapter;
+import com.chaoyang805.blocksms.listener.RecyclerListenerAdapter;
 import com.chaoyang805.blocksms.bean.SMS;
 import com.chaoyang805.blocksms.utils.StringFormatUtil;
 

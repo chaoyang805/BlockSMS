@@ -3,6 +3,8 @@ package com.chaoyang805.blocksms;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.chaoyang805.blocksms.app.BlockSMSApp;
@@ -34,43 +36,63 @@ public class SMSDetailActivity extends AppCompatActivity {
      */
     private SMSDAOImpl mSMSDaoImpl;
 
+    private Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms_detail);
         initViews();
         //从application类中取得数据库操作对象
-        mSMSDaoImpl = ((BlockSMSApp)getApplication()).getSMSDaoImpl();
+        mSMSDaoImpl = ((BlockSMSApp) getApplication()).getSMSDaoImpl();
         Intent intent = getIntent();
         //获得intent中的id信息，默认为-1。
         int relatedId = intent.getIntExtra(Constants.EXTRA_ID, -1);
         if (relatedId < 0) {
             LogHelper.d(TAG, "relatedId = " + relatedId + "< 0,return!");
-            return;
+            SMS sms = new SMS(System.currentTimeMillis(), "哈哈哈哈哈哈哈哈", "11101258");
+            showSMSDetail(sms);
+//            return;
+        } else {
+            //从数据库查询短信
+            SMS sms = mSMSDaoImpl.getSMSById(relatedId);
+            showSMSDetail(sms);
         }
-        //从数据库查询短信
-        SMS sms = mSMSDaoImpl.getSMSById(relatedId);
-        showSMSDetail(sms);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
      * 为视图控件绑定id
      */
     private void initViews() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mTvSMSDetail = (TextView) findViewById(R.id.tv_sms_detail);
         mTvRelatedNum = (TextView) findViewById(R.id.tv_related_num);
         mTvRelatedTime = (TextView) findViewById(R.id.tv_related_time);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     /**
      * 将查询出来的结果显示在控件上
+     *
      * @param sms
      */
     private void showSMSDetail(SMS sms) {
         LogHelper.d(TAG, "showSMSDetail");
         mTvSMSDetail.setText(sms.getSMSInfo());
-        mTvRelatedNum.setText(getString(R.string.from,sms.getPhoneNum()));
+        mTvRelatedNum.setText(getString(R.string.from, sms.getPhoneNum()));
         mTvRelatedTime.setText(StringFormatUtil.formatMilliseconds(sms.getReceivedTime()));
     }
 

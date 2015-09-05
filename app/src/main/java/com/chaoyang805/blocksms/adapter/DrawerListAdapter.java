@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chaoyang805.blocksms.R;
+import com.chaoyang805.blocksms.listener.RecyclerListenerAdapter;
 
 import java.util.List;
 
@@ -22,9 +23,9 @@ public class DrawerListAdapter extends RecyclerView.Adapter<DrawerListAdapter.Dr
         void onItemClick(View v, int position);
     }
 
-    private OnItemClickListener mListener;
+    private RecyclerListenerAdapter mListener;
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(RecyclerListenerAdapter listener) {
         mListener = listener;
     }
     public DrawerListAdapter(List<String> datas) {

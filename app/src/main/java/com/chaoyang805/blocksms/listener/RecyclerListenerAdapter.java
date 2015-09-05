@@ -1,4 +1,4 @@
-package com.chaoyang805.blocksms;
+package com.chaoyang805.blocksms.listener;
 
 import android.view.View;
 
@@ -12,6 +12,10 @@ public abstract class RecyclerListenerAdapter implements SMSRecyclerAdapter.Recy
 
     @Override
     public void onItemClick(View v, SMS sms) {
+
+    }
+
+    public void onItemClick(View v,int position){
 
     }
 
