@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/drawer_item_bg"
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:orientation="vertical">
@@ -7,10 +8,9 @@
         android:id="@+id/tv_tag"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#2D2F30"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
         android:textSize="18sp"
         android:text="关键字"
-        android:textColor="@android:color/white"/>
+        android:textColor="@color/drawer_item_text_color_normal"/>
 </LinearLayout>

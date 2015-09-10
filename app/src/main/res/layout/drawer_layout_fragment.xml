@@ -2,6 +2,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_list"
     android:paddingTop="25dp"
+    android:background="@android:color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#2D2F30" />
+    android:layout_height="match_parent" />

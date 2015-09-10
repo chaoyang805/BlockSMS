@@ -44,6 +44,9 @@
                 android:priority="1000">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="com.chaoyang805.blocksms.ACTION_SMS"/>
+            </intent-filter>
         </receiver>
     </application>
 

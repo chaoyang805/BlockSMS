@@ -3,4 +3,7 @@
     <color name="colorPrimaryDark">#2196f3</color>
     <color name="list_item_background_color">#FDFDFE</color>
     <color name="list_item_background_color_selected">#EFF2FB</color>
+    <color name="drawer_item_unselected_color">#F8F8F8</color>
+    <color name="drawer_item_selected_color">#E7E7E7</color>
+    <color name="drawer_item_text_color_normal">#212121</color>
 </resources>

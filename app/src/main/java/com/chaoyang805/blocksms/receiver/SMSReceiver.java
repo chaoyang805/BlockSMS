@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsMessage;
+import android.text.TextUtils;
 
 import com.chaoyang805.blocksms.MainActivity;
 import com.chaoyang805.blocksms.R;
@@ -23,6 +24,7 @@ import java.util.List;
 public class SMSReceiver extends BroadcastReceiver {
 
     public static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+    public static final String ACTION_TEST = "com.chaoyang805.blocksms.ACTION_SMS";
 
     private static final String TAG = "SMSReceiver";
     private SMSDAOImpl mSMSDaoImpl;
@@ -61,6 +63,15 @@ public class SMSReceiver extends BroadcastReceiver {
                 //终止广播
                 abortBroadcast();
                 //显示拦截通知
+                showNotification(sms, context);
+            }
+        } else if (intent.getAction().equals(ACTION_TEST)) {
+            String content = intent.getStringExtra("extra_content");
+            String phone = intent.getStringExtra("extra_phone");
+            if (!TextUtils.isEmpty(content) && !TextUtils.isEmpty(phone)) {
+                SMS sms = new SMS(System.currentTimeMillis(), content, phone);
+                blockSms(sms);
+
                 showNotification(sms, context);
             }
         }

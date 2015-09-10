@@ -14,15 +14,14 @@ import android.view.ViewGroup;
 
 import com.chaoyang805.blocksms.MainActivity;
 import com.chaoyang805.blocksms.R;
-import com.chaoyang805.blocksms.listener.RecyclerListenerAdapter;
 import com.chaoyang805.blocksms.SMSDetailActivity;
 import com.chaoyang805.blocksms.adapter.SMSRecyclerAdapter;
 import com.chaoyang805.blocksms.app.BlockSMSApp;
 import com.chaoyang805.blocksms.bean.SMS;
 import com.chaoyang805.blocksms.db.SMSDAOImpl;
+import com.chaoyang805.blocksms.listener.RecyclerListenerAdapter;
 import com.chaoyang805.blocksms.utils.Constants;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +48,7 @@ public class SMSFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mSMSList.setLayoutManager(linearLayoutManager);
         mSMSDAO = ((BlockSMSApp) getActivity().getApplication()).getSMSDaoImpl();
-        generateDatas();
+        mList = mSMSDAO.getAllSMS();
         mAdapter = new SMSRecyclerAdapter(getActivity(),mList);
         mAdapter.addListener(new RecyclerListenerAdapter() {
             @Override
@@ -59,8 +58,7 @@ public class SMSFragment extends Fragment {
 
             @Override
             public void onItemClick(View itemView, SMS sms) {
-//                int currentPosId = sms.getId();
-                int currentPosId = -1;
+                int currentPosId = sms.getId();
                 Intent intent = new Intent(getActivity(), SMSDetailActivity.class);
                 intent.putExtra(Constants.EXTRA_ID, currentPosId);
                 startActivity(intent);
@@ -103,10 +101,10 @@ public class SMSFragment extends Fragment {
         }
     }
 
-    private void generateDatas() {
-        mList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            mList.add(new SMS(System.currentTimeMillis(), "测试短信" + i, "1378874707" + i));
-        }
-    }
+//    private void generateDatas() {
+//        mList = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            mList.add(new SMS(System.currentTimeMillis(), "测试短信" + i, "1378874707" + i));
+//        }
+//    }
 }

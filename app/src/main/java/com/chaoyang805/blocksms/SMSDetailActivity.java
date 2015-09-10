@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chaoyang805.blocksms.app.BlockSMSApp;
 import com.chaoyang805.blocksms.bean.SMS;
@@ -49,10 +50,8 @@ public class SMSDetailActivity extends AppCompatActivity {
         //获得intent中的id信息，默认为-1。
         int relatedId = intent.getIntExtra(Constants.EXTRA_ID, -1);
         if (relatedId < 0) {
-            LogHelper.d(TAG, "relatedId = " + relatedId + "< 0,return!");
-            SMS sms = new SMS(System.currentTimeMillis(), "哈哈哈哈哈哈哈哈", "11101258");
-            showSMSDetail(sms);
-//            return;
+            Toast.makeText(SMSDetailActivity.this, "查询出错", Toast.LENGTH_SHORT).show();
+            return;
         } else {
             //从数据库查询短信
             SMS sms = mSMSDaoImpl.getSMSById(relatedId);
@@ -64,6 +63,7 @@ public class SMSDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            //点击左上角向左箭头实现退出Activity
             onBackPressed();
             return true;
         } else {
